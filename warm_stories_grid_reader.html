@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爸爸唔易做 - 爸爸的心靈成長隨筆</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            lightBg: '#fdfbf7',     // 溫馨米白
+                            lightCard: '#ffffff',
+                            lightText: '#2e2a25',
+                            lightMuted: '#6e655f',
+                            lightBorder: '#eaddcf',
+                            lightAccent: '#f5ece1',
+                            
+                            sepiaBg: '#f4ecd8',     // 書香牛皮紙
+                            sepiaCard: '#fcf8f0',
+                            sepiaText: '#433422',
+                            sepiaMuted: '#7c654d',
+                            sepiaBorder: '#e3d2bd',
+                            sepiaAccent: '#ebdcb9',
+
+                            darkBg: '#121214',      // 靜謐深夜
+                            darkCard: '#1a1a1e',
+                            darkText: '#e3e3e7',
+                            darkMuted: '#BFC4D1',   // 高對比度灰色，優化夜間閱讀
+                            darkBorder: '#2d2d34',
+                            darkAccent: '#2a2620',
+
+                            primary: '#8c6239',     // 暖木棕色（主調）
+                            secondary: '#d9a05b'    // 柔金/磚橙（點綴）
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        sans: ['"Noto Sans HK"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome (僅線條圖標) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 平滑主題過渡 */
+        body, div, p, span, button, h1, h2, h3, a {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        /* 自訂滾動條 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(140, 98, 57, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="theme-sepia font-sans min-height-screen">
+
+    <!-- 頂部導航列 -->
+    <nav id="navbar" class="sticky top-0 z-40 border-b transition-all duration-300">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            
+            <!-- 返回按鈕 (僅在閱讀文章時顯示) -->
+            <button id="backBtn" onclick="goHome()" class="hidden items-center gap-2 font-medium text-sm transition-transform active:scale-95">
+                <i class="fa-solid fa-arrow-left"></i> 返回首頁
+            </button>
+            
+            <!-- 首頁 Logo (僅在首頁顯示) -->
+            <div id="logoContainer" class="flex items-center gap-2">
+                <span class="font-serif font-bold text-lg tracking-wider" id="navLogo">《爸爸唔易做》</span>
+            </div>
+
+            <!-- 右側工具欄 (主題切換 & 字型調節) -->
+            <div class="flex items-center gap-3">
+                <!-- 三種主題切換 -->
+                <div class="flex items-center rounded-full p-1 border" id="themeGroup">
+                    <button onclick="setTheme('light')" id="btn-theme-light" class="w-8 h-8 rounded-full flex items-center justify-center text-xs" title="日光模式">
+                        <i class="fa-regular fa-sun"></i>
+                    </button>
+                    <button onclick="setTheme('sepia')" id="btn-theme-sepia" class="w-8 h-8 rounded-full flex items-center justify-center text-xs" title="書香模式">
+                        <i class="fa-solid fa-book-open"></i>
+                    </button>
+                    <button onclick="setTheme('dark')" id="btn-theme-dark" class="w-8 h-8 rounded-full flex items-center justify-center text-xs" title="深夜模式">
+                        <i class="fa-regular fa-moon"></i>
+                    </button>
+                </div>
+
+                <!-- 分隔線 (僅在閱讀文章時顯示) -->
+                <span id="toolSeparator" class="hidden h-5 w-px"></span>
+
+                <!-- 字體縮放控制 (僅在閱讀文章時顯示) -->
+                <div id="fontControls" class="hidden items-center gap-1">
+                    <button onclick="adjustFontSize(-1)" class="w-8 h-8 rounded-lg flex items-center justify-center border font-medium text-xs active:scale-95" title="縮小字體">
+                        A-
+                    </button>
+                    <button onclick="adjustFontSize(1)" class="w-8 h-8 rounded-lg flex items-center justify-center border font-medium text-sm active:scale-95" title="放大字體">
+                        A+
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主體內容容器 -->
+    <main class="max-w-4xl mx-auto px-4 py-8 md:py-12 min-h-[calc(100vh-4rem)]">
+        
+        <!-- 【首頁：故事連載冊】 -->
+        <div id="homepageView" class="space-y-12">
+            <!-- 溫馨引言區 -->
+            <div class="text-center space-y-4 max-w-xl mx-auto py-4">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium tracking-wide uppercase" id="badgeTag">
+                    陪伴孩子，也被天父塑造 —— 爸爸的心靈成長隨筆
+                </span>
+                <h1 class="text-3xl md:text-4xl font-serif font-bold tracking-wider" id="homeTitle">《爸爸唔易做》</h1>
+                <p class="text-sm md:text-base leading-relaxed" id="homeDesc">
+                    做爸爸，從來都不是因為我們已經完美。而是在陪伴女兒成長的磕磕碰碰中，我們一次次回到天父面前，學習如何去愛，如何被愛，如何成為祂想我們成為的模樣。
+                </p>
+            </div>
+
+            <!-- 故事卡片網格 -->
+            <div class="grid gap-6 md:grid-cols-2" id="storyGrid">
+                <!-- JavaScript 將動態生成卡片 -->
+            </div>
+        </div>
+
+        <!-- 【閱讀頁面：沉浸式閱讀器】 -->
+        <div id="readingView" class="hidden max-w-2xl mx-auto space-y-10">
+            <!-- 標題與導言 -->
+            <header class="text-center space-y-4 border-b pb-8" id="articleHeader">
+                <span id="articleVol" class="text-xs uppercase tracking-widest font-semibold text-brand-primary"></span>
+                <h2 id="articleTitle" class="text-3xl font-serif font-bold leading-tight"></h2>
+                <p id="articleSubtitle" class="text-sm italic"></p>
+            </header>
+
+            <!-- 1. 父女小劇場 -->
+            <section class="rounded-2xl p-6 md:p-8 border shadow-sm space-y-4" id="cardTheater">
+                <h3 class="flex items-center gap-2 font-bold text-lg border-b pb-3" id="titleTheater">
+                    <i class="fa-regular fa-comment-dots text-brand-primary"></i> 父女小劇場
+                </h3>
+                <div id="textTheater" class="leading-relaxed whitespace-pre-wrap"></div>
+            </section>
+
+            <!-- 2. 從神而來的提醒 (經文特別高亮) -->
+            <section class="rounded-2xl p-8 border text-center space-y-4 shadow-sm" id="cardBible">
+                <div class="inline-flex items-center gap-2 justify-center font-bold text-lg" id="titleBible">
+                    <i class="fa-solid fa-book-open text-brand-primary"></i> 從神而來的提醒
+                </div>
+                <blockquote class="font-serif text-xl md:text-2xl font-bold leading-relaxed px-4 text-brand-primary" id="textBible"></blockquote>
+                <cite id="textVerse" class="block text-xs uppercase tracking-wider not-italic"></cite>
+            </section>
+
+            <!-- 3. 爸爸心底話 -->
+            <section class="rounded-2xl p-6 md:p-8 border shadow-sm space-y-4" id="cardThoughts">
+                <h3 class="flex items-center gap-2 font-bold text-lg border-b pb-3" id="titleThoughts">
+                    <i class="fa-solid fa-feather-pointed text-brand-primary"></i> 爸爸心底話
+                </h3>
+                <div id="textThoughts" class="leading-relaxed whitespace-pre-wrap"></div>
+            </section>
+
+            <!-- 4. 想一想 -->
+            <section class="rounded-2xl p-6 md:p-8 border shadow-sm space-y-4" id="cardReflection">
+                <h3 class="flex items-center gap-2 font-bold text-lg border-b pb-3" id="titleReflection">
+                    <i class="fa-solid fa-compass text-brand-primary"></i> 想一想
+                </h3>
+                <div id="textReflection" class="leading-relaxed whitespace-pre-wrap"></div>
+            </section>
+
+            <!-- 5. 爸爸的禱告 -->
+            <section class="rounded-2xl p-6 md:p-8 border-2 border-dashed shadow-sm space-y-4" id="cardPrayer">
+                <h3 class="flex items-center gap-2 font-bold text-lg border-b pb-3" id="titlePrayer">
+                    <i class="fa-solid fa-hands-praying text-brand-primary"></i> 爸爸的禱告
+                </h3>
+                <div id="textPrayer" class="leading-relaxed whitespace-pre-wrap italic opacity-95"></div>
+            </section>
+
+            <!-- 閱讀頁面頁尾 -->
+            <footer class="pt-8 text-center">
+                <button onclick="goHome()" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-medium text-sm transition-all duration-300 hover:scale-105 active:scale-95" id="footerBackBtn">
+                    <i class="fa-solid fa-arrow-left"></i> 返回首頁，閱讀更多手記
+                </button>
+            </footer>
+        </div>
+
+    </main>
+
+    <!-- 頁尾聲明 -->
+    <footer class="border-t py-8 text-center text-xs" id="siteFooter">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p>《爸爸唔易做》 —— 爸爸的心靈成長隨筆</p>
+            <p class="opacity-60">在陪伴與被塑造的旅程中，我們與天父同行。</p>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         💡 文章數據庫與控制邏輯
+         ========================================== -->
+    <script>
+        // 心靈小品文章庫
+        const ARTICLES = [
+            {
+                vol: "系列（一）",
+                title: "神點解揀咗我做妳爸爸？",
+                subtitle: "身份的掙扎 —— 「我是否一個合資格的爸爸？」",
+                description: "面對女兒天真的一問，爸爸摸著下巴，從不羈的冷笑話裡，看見了神精準的揀選與恩典塑造。",
+                theater: `星期六晚上，爸爸陪女兒收拾好餐桌。兩個人坐喺客廳，一邊食雪糕，一邊傾偈。
+女兒忽然抬起頭，認真咁問：
+「爸爸，點解神揀咗你做我爸爸？」
+
+爸爸愣了一愣。呢條問題，比工作上任何一個難題都難答。
+爸爸摸摸下巴，一本正經咁答：
+「可能因為爸爸玉樹臨風，不羈之中帶點冷傲，係一個超乎常人極限嘅人。」
+
+女兒眨眨眼，一臉疑惑：「超……咩人？」
+爸爸忍住笑：「超人。」說罷自己忍唔住哈哈大笑。
+女兒望住爸爸，笑住搖頭：「爸爸，你又講冷笑話。」
+
+爸爸笑了一會，慢慢收起笑容。
+「其實，爸爸真係唔知道點解神揀咗我。」
+「爸爸知道自己唔完美。有時冇耐性，有時會做錯，有時仲會惹妳唔開心。」
+「但爸爸相信，神從來唔會揀錯。祂將妳交畀爸爸，唔係因為爸爸最好，而係因為祂要爸爸一路依靠祂，一路學習點樣愛妳、保護妳，同埋帶妳認識祂。」
+
+女兒靜靜望住爸爸，然後輕輕靠喺爸爸肩膀。過咗一陣，她細細聲咁講：
+「爸爸，我都覺得神冇揀錯。」
+爸爸冇再講嘢，只係輕輕攬住女兒。那一刻，爸爸心裡充滿感恩。`,
+                bibleText: "「兒女是耶和華所賜的產業；所懷的胎是祂所給的賞賜。」",
+                bibleVerse: "—— 詩篇 127:3",
+                thoughts: `每一位爸爸，都曾經問過自己：「我做得夠好嗎？」
+成為爸爸之後，我們每天都有不同的責任：工作、接送、煮飯、陪功課、處理家中的大小事情。有時候，我們很努力想給孩子最好的生活；但在忙碌之中，卻忘記停下來思想：女兒不是我的成就，而是神交託給我的禮物。
+
+我們很容易以為，神揀選成為爸爸的人，應該是成熟、有智慧、有耐性的人。但如果真是這樣，相信沒有一個人夠資格。因為我們都會疲倦，都會發脾氣，都會說錯話，也會有做得不好的時候。
+
+然而，神的恩典就在這裡：祂不是等我們成為完美爸爸，才把女兒交給我們。祂是在把女兒交給我們的同時，也開始塑造我們成為更好的爸爸。原來，在養育女兒的過程中，神也在養育爸爸。
+
+每一次願意聆聽，每一次放下面子道歉，每一次放下手機陪伴，每一次陪女兒禱告，都是神在我們生命中工作的時刻。神沒有把女兒交給一位完美的爸爸。祂把女兒交給一位願意依靠祂、願意學習愛的爸爸。`,
+                reflection: `你有沒有曾經覺得：「我可能不是一個好爸爸？」
+也許今天神想提醒你：做爸爸，不是因為你已經準備好；而是在成為爸爸的旅程中，神一直陪伴你成長。
+女兒需要的，不是一個永遠不犯錯的爸爸。她需要的是一個願意愛她、願意改變、願意帶她走向神的爸爸。`,
+                prayer: `親愛的天父，
+感謝祢把女兒交託給我。我承認自己不是一個完美的爸爸。我會疲倦，會軟弱，會做錯，也有很多需要學習的地方。
+但感謝祢，祢不是因為我的能力才揀選我，而是在祢的恩典中呼召我成為爸爸。
+求祢賜我智慧，讓我懂得怎樣愛她；求祢賜我耐心，讓我懂得怎樣陪伴她；更求祢幫助我，讓我的生命成為她認識祢的一扇窗。
+願我的女兒不單從我的說話，更從我的生命，看見天父的慈愛、信實和恩典。
+奉主耶穌基督的名祈求，
+阿們。`
+            },
+            {
+                vol: "系列（二）",
+                title: "唔好意思，爸爸都係第一次做爸爸",
+                subtitle: "面子的掙扎 —— 「承認軟弱，也是一種力量。」",
+                description: "當大人在忙碌或疲憊中對孩子大聲說話，拉下面子說一聲「對不起」，需要的是勇氣，還是對神的順服？",
+                theater: `晚飯後，女兒倒翻了果汁，糖水沾濕了剛剛做好的手作。
+爸爸一天的疲倦登時爆發：「妳點解做嘢總是咁唔小心？講咗好多次唔好放喺邊邊！」
+女兒嚇得縮了縮肩膀，眼眶泛紅，咬著嘴唇不敢說話。
+
+空氣安靜得可怕。爸爸轉身走入廚房拿抹布，看著水龍頭的流水，心裡充滿懊悔。
+明明今天工作上被客戶責難，自己憋了一肚子氣。
+女兒只是不小心，我卻把氣撒在最愛的人身上。
+
+心底有一個聲音：「去跟她道歉吧。」
+但另一個聲音說：「我是爸爸，如果向小孩認錯，以後怎麼管教？」
+
+爸爸深呼吸，關掉水龍頭。回到客廳蹲在女兒身邊：
+「對唔起，剛才爸爸太惡。爸爸是因為今天工作累了，亂發脾氣，不是因為妳不好。」
+女兒眨了眨含著淚光的眼睛，伸出小手抱住爸爸：
+「唔緊要，爸爸。我都唔小心整污糟咗。我陪你一齊抹。」`,
+                bibleText: "「我的恩典夠你用的，因為我的能力是在人的軟弱上顯得完全。」",
+                bibleVerse: "—— 哥林多後書 12:9",
+                thoughts: `在傳統的觀念裡，爸爸似乎必須代表權威、代表「正確」和「永遠強大」。我們害怕在孩子面前暴露缺點，更害怕向孩子低頭，認為這樣會喪失尊嚴。
+
+然而，聖經卻給了我們一個相反的智慧：承認自己的軟弱，神的恩典才能彰顯。
+當我們對孩子說一聲「對不起」時，我們其實是在向孩子展示：爸爸也是一個需要耶穌拯救的罪人。我們不是完美的上帝，我們只是和他們一起在恩典中學習的罪人。
+
+道歉，不會讓我們失去權威；相反，這能建立真實的信任。當孩子看見爸爸在做錯事時願意謙卑、尋求原諒，他們也學會了在神面前如何悔改、如何與人和好。`,
+                reflection: `你上一次對孩子（或對身邊的人）說「對不起」是什麼時候？
+放下作長輩、作丈夫、作爸爸的面子，背後最大的支撐力，是我們知道天父也同樣天天用恩典寬容我們的過犯。`,
+                prayer: `親愛的天父，
+要在孩子面前承認做錯，真的很難。我的驕傲、我的面子，常常攔阻我承認自己的不完美。
+主啊，求祢賜我謙卑的心。讓我看見，我不需要假裝成為一個不會犯錯的神。相反，當我對女兒真誠地坦露軟弱、尋求原諒時，祢的愛和恩典就流淌在我們之間。
+求祢保守我們的家，成為一個充滿饒恕、恩典與溫暖的地方。
+奉主耶穌基督的名祈求，
+阿們。`
+            },
+
+            {
+                vol: "系列（三）",
+                title: "爸爸，你可唔可以唔好咁多意見？",
+                subtitle: "聆聽的功課 —— 「有時候，愛就是先聽我講完。」",
+                description: "女兒只想找爸爸傾訴，爸爸卻急著提供解決方法。當一句 dad joke 也無法化解尷尬，爸爸才發現，原來聆聽也是一種愛的功課。",
+                theater: `某晚，女兒放學回家，面帶愁容。
+女兒：「Daddy，今日學校有件事令我好唔開心……」
+爸爸立即放下手機，進入「爸爸問題解決模式」。
+爸爸：「係咩事？邊個做嘅？妳有冇同老師講？下次妳可以咁樣做……」
+女兒：「Daddy，我仲未講完喎！」
+爸爸：「哦，好，妳繼續。」
+女兒講了兩句。
+爸爸：「等陣！爸爸諗到一個更好嘅方法……」
+女兒終於忍唔住：
+「Daddy！我只係想你聽我講，唔係想你教我點做呀！」
+爸爸愣了一愣。
+「哦……原來係咁。咁爸爸而家做一個稱職嘅聆聽者！」
+女兒：「即係點？」
+爸爸一本正經咁答：
+「即係……我會洗耳恭聽！」
+女兒望住爸爸，無奈地說：
+「Daddy，你可唔可以唔好連聽人講嘢都要講 dad joke？」
+爸爸摸摸鼻子：
+「好啦好啦！爸爸今次一定唔會再打斷妳。」
+
+三秒後。
+爸爸：「不過呢……」
+女兒：「DADDY！！！」
+爸爸終於閉上嘴巴。
+
+過了一會，爸爸收起笑容，輕輕坐到女兒身旁。
+「對唔住呀，頭先爸爸太心急，一心只想幫妳解決問題，反而冇好好聽妳講。」
+女兒低著頭，小聲說：
+「我今日喺學校真係好唔開心。我只係想搵個人聽我講吓。」
+爸爸點點頭：
+「好，咁今次爸爸唔出主意，唔講道理，亦都唔講冷笑話。妳慢慢講，爸爸聽住。」
+
+女兒終於露出一點笑容，開始把今天發生的事告訴爸爸。
+爸爸沒有急著插嘴，也沒有立即判斷誰對誰錯。他只是安靜地聽著，偶爾問一句：「咁妳當時係咪覺得好委屈？」
+女兒慢慢把心裡的話說完。
+爸爸輕輕拍著她的肩膀：
+「多謝妳肯同爸爸講。爸爸未必每次都知道點樣幫妳，但爸爸願意聽。」
+女兒靠在爸爸身旁：
+「多謝你，Daddy。」
+爸爸心裡一暖，忍不住又想開口：
+「咁爸爸今次係咪成功做到一個聆聽者？」
+女兒望住他：
+「差少少啦。你如果而家唔再講，就更加成功。」
+爸爸立即做了一個拉上嘴巴拉鏈的動作。
+今次，父女兩個都笑了。
+
+而爸爸心裡卻記住了一件事：有時候，女兒需要的不是一個甚麼都懂的爸爸，而是一個願意先聽她把話說完的爸爸。`,
+                bibleText: "「我親愛的弟兄們，這是你們所知道的，但你們各人要快快地聽，慢慢地說，慢慢地動怒。」",
+                bibleVerse: "—— 雅各書 1:19",
+                thoughts: `做爸爸的，有時真的很容易進入「問題解決模式」。
+
+女兒遇到困難，我們便想分析原因、提供方法、分享自己的經驗，希望她少走冤枉路。我們以為，這就是愛她的表現。
+
+但有時候，我們太急著幫她解決問題，反而忘記先了解她的感受。
+
+女兒說今天在學校不開心，我們可能立即問：「妳有冇同老師講？」「妳下次可以點做？」這些問題本身沒有錯，甚至可能很有幫助。但如果我們還未聽完，就急著給答案，女兒可能會覺得，爸爸關心的是怎樣解決事情，而不是她正在經歷甚麼。
+
+聖經提醒我們要「快快地聽，慢慢地說」。這不只是待人接物的智慧，也是學習愛人的功課。
+
+聆聽並不代表我們不再管教孩子，也不代表孩子說甚麼都是對的。聆聽是讓我們在回應之前，先了解事情的全貌，也讓孩子知道，她的感受和想法值得被認真對待。
+
+其實，女兒長大之後，願不願意繼續跟爸爸分享心事，未必只取決於爸爸能提供多少好建議，也取決於她是否相信，爸爸會願意聽她說話。
+
+更重要的是，我們在天父面前，不也常常帶著許多憂慮和不明白嗎？我們需要學習信靠祂，也需要學習把同樣的耐心和關懷帶進與家人的相處之中。
+
+有時候，做一個好爸爸，不是急著說出最好的答案，而是願意先放下自己的答案。
+
+少一點打斷，多一點聆聽；少一點急著教導，多一點耐心陪伴。這些看似微小的改變，卻可能讓女兒更深地感受到愛。
+
+至於 dad joke……當然可以繼續講。不過，最好等女兒講完先！`,
+    reflection: `當女兒向你分享煩惱時，你通常會先聆聽，還是立即提供解決方法？
+
+你有沒有試過，明明出於好意，卻因為太心急給意見，反而令孩子不願意繼續分享？
+
+今個星期，試著做一件簡單的事：當女兒想找你傾訴時，先放下手機，望著她的眼睛，讓她把話說完。你可以問她：「妳想爸爸幫妳諗辦法，定係想爸爸先聽妳講？」
+
+女兒需要的，不一定是一個永遠有答案的爸爸，而是一個願意花時間了解她的爸爸。
+
+有時候，最好的回答，就是：「爸爸聽緊，妳慢慢講。」`,
+                prayer: `親愛的天父，
+
+求祢幫助我成為一個願意聆聽的爸爸。
+
+當女兒遇到困難時，求祢提醒我，不要急著給她答案，也不要以為自己的經驗總是最好的方法。
+
+求祢賜我耐心，讓我懂得先聆聽、先理解，再用愛心回應。當我不知道怎樣幫助她時，求祢幫助我陪伴她，並把她交託在祢手中。
+
+求祢保守我們的關係，讓女兒知道，無論她遇到甚麼事情，都可以安心地與爸爸分享。也求祢幫助我，在聆聽和陪伴中，活出祢所喜悅的愛。
+
+奉主耶穌基督的名祈求，
+阿們。`
+            },
+
+            {
+                vol: "系列（三）",
+                title: "慢一點，等埋爸爸",
+                subtitle: "步伐的掙扎 —— 「放慢腳步，才聽得見神微小的聲音。」",
+                isUpcoming: true, // 標記為預告篇章
+                description: "看著女兒在前面一蹦一跳前行、不時轉頭招手的背影，爸爸恍然大悟：到底是她在等我，還是天父一直在耐心地等著我？",
+                theater: "",
+                bibleText: "",
+                bibleVerse: "",
+                thoughts: "",
+                reflection: "",
+                prayer: ""
+            }
+        ];
+
+        // 閱讀字型大小狀態
+        let currentFontSizeClass = 'text-base'; // 預設 base (16px)
+
+        // ==========================================
+        // 🎨 主題配色設定
+        // ==========================================
+        function setTheme(theme) {
+            const body = document.body;
+            const nav = document.getElementById('navbar');
+            const footer = document.getElementById('siteFooter');
+            const themeGroup = document.getElementById('themeGroup');
+            const fontControls = document.getElementById('fontControls');
+            const toolSeparator = document.getElementById('toolSeparator');
+            
+            // 首頁元素
+            const badgeTag = document.getElementById('badgeTag');
+            const homeTitle = document.getElementById('homeTitle');
+            const homeDesc = document.getElementById('homeDesc');
+            
+            // 閱讀器元素
+            const articleHeader = document.getElementById('articleHeader');
+            const backBtn = document.getElementById('backBtn');
+            const footerBackBtn = document.getElementById('footerBackBtn');
+            const cards = [
+                document.getElementById('cardTheater'),
+                document.getElementById('cardThoughts'),
+                document.getElementById('cardReflection'),
+                document.getElementById('cardPrayer')
+            ];
+            const cardBible = document.getElementById('cardBible');
+            const titleBible = document.getElementById('titleBible');
+            const textVerse = document.getElementById('textVerse');
+
+            // 偵測當前是否處於閱讀狀態，防止返回首頁按鈕在首頁時被強制顯示
+            const isReading = document.getElementById('homepageView').classList.contains('hidden');
+            const displayClass = isReading ? 'flex' : 'hidden';
+
+            // 移除所有主題樣式
+            body.classList.remove('theme-light', 'theme-sepia', 'theme-dark');
+            
+            // 重新套用對應主題
+            if (theme === 'light') {
+                body.classList.add('theme-light');
+                
+                // 基礎配色
+                body.className = "bg-brand-lightBg text-brand-lightText font-sans transition-colors duration-300 min-h-screen";
+                nav.className = "sticky top-0 z-40 bg-brand-lightCard border-brand-lightBorder text-brand-lightText border-b backdrop-blur bg-opacity-95";
+                footer.className = "border-t border-brand-lightBorder py-8 text-center text-xs text-brand-lightMuted";
+                themeGroup.className = "flex items-center rounded-full p-1 border border-brand-lightBorder bg-brand-lightBg";
+                
+                // 按鈕激活狀態
+                setActiveThemeButton('light');
+
+                // 工具欄按鈕
+                fontControls.querySelectorAll('button').forEach(btn => {
+                    btn.className = "w-8 h-8 rounded-lg flex items-center justify-center border border-brand-lightBorder text-brand-lightText bg-brand-lightCard hover:bg-brand-lightAccent transition-all";
+                });
+                toolSeparator.className = "h-5 w-px bg-brand-lightBorder";
+                backBtn.className = `${displayClass} items-center gap-2 font-medium text-sm text-brand-lightMuted hover:text-brand-primary active:scale-95`;
+                footerBackBtn.className = "inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-lightBorder bg-brand-lightCard text-brand-lightMuted hover:text-brand-primary hover:bg-brand-lightAccent transition-all duration-300 hover:scale-105 active:scale-95";
+
+                // 首頁元素配色
+                if(badgeTag) badgeTag.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase bg-brand-lightAccent text-brand-primary";
+                if(homeTitle) homeTitle.className = "text-3xl md:text-4xl font-serif font-bold tracking-wider text-brand-primary";
+                if(homeDesc) homeDesc.className = "text-sm md:text-base leading-relaxed text-brand-lightMuted";
+
+                // 閱讀器元素配色
+                if(articleHeader) articleHeader.className = "text-center space-y-4 border-b border-brand-lightBorder pb-8";
+                cards.forEach(card => {
+                    if(card) {
+                        if (card.id === 'cardPrayer') {
+                            card.className = "rounded-2xl p-6 md:p-8 border-2 border-dashed border-brand-secondary bg-brand-lightBg shadow-sm space-y-4";
+                        } else {
+                            card.className = "rounded-2xl p-6 md:p-8 border border-brand-lightBorder bg-brand-lightCard shadow-sm space-y-4";
+                        }
+                    }
+                });
+                if(cardBible) cardBible.className = "rounded-2xl p-8 border border-brand-lightBorder bg-brand-lightAccent text-center space-y-4 shadow-sm";
+                if(titleBible) titleBible.className = "inline-flex items-center gap-2 justify-center font-bold text-lg text-brand-primary";
+                if(textVerse) textVerse.className = "block text-xs uppercase tracking-wider not-italic text-brand-lightMuted";
+
+            } else if (theme === 'sepia') {
+                body.classList.add('theme-sepia');
+                
+                body.className = "bg-brand-sepiaBg text-brand-sepiaText font-sans transition-colors duration-300 min-h-screen";
+                nav.className = "sticky top-0 z-40 bg-brand-sepiaCard border-brand-sepiaBorder text-brand-sepiaText border-b backdrop-blur bg-opacity-95";
+                footer.className = "border-t border-brand-sepiaBorder py-8 text-center text-xs text-brand-sepiaMuted";
+                themeGroup.className = "flex items-center rounded-full p-1 border border-brand-sepiaBorder bg-brand-sepiaBg";
+                
+                setActiveThemeButton('sepia');
+
+                fontControls.querySelectorAll('button').forEach(btn => {
+                    btn.className = "w-8 h-8 rounded-lg flex items-center justify-center border border-brand-sepiaBorder text-brand-sepiaText bg-brand-sepiaCard hover:bg-brand-sepiaAccent transition-all";
+                });
+                toolSeparator.className = "h-5 w-px bg-brand-sepiaBorder";
+                backBtn.className = `${displayClass} items-center gap-2 font-medium text-sm text-brand-sepiaMuted hover:text-brand-primary active:scale-95`;
+                footerBackBtn.className = "inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-sepiaBorder bg-brand-sepiaCard text-brand-sepiaMuted hover:text-brand-primary hover:bg-brand-sepiaAccent transition-all duration-300 hover:scale-105 active:scale-95";
+
+                if(badgeTag) badgeTag.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase bg-brand-sepiaAccent text-brand-primary";
+                if(homeTitle) homeTitle.className = "text-3xl md:text-4xl font-serif font-bold tracking-wider text-brand-primary";
+                if(homeDesc) homeDesc.className = "text-sm md:text-base leading-relaxed text-brand-sepiaMuted";
+
+                if(articleHeader) articleHeader.className = "text-center space-y-4 border-b border-brand-sepiaBorder pb-8";
+                cards.forEach(card => {
+                    if(card) {
+                        if (card.id === 'cardPrayer') {
+                            card.className = "rounded-2xl p-6 md:p-8 border-2 border-dashed border-brand-secondary bg-brand-sepiaBg shadow-sm space-y-4";
+                        } else {
+                            card.className = "rounded-2xl p-6 md:p-8 border border-brand-sepiaBorder bg-brand-sepiaCard shadow-sm space-y-4";
+                        }
+                    }
+                });
+                if(cardBible) cardBible.className = "rounded-2xl p-8 border border-brand-sepiaBorder bg-brand-sepiaAccent text-center space-y-4 shadow-sm";
+                if(titleBible) titleBible.className = "inline-flex items-center gap-2 justify-center font-bold text-lg text-brand-primary";
+                if(textVerse) textVerse.className = "block text-xs uppercase tracking-wider not-italic text-brand-sepiaMuted";
+
+            } else if (theme === 'dark') {
+                body.classList.add('theme-dark');
+                
+                body.className = "bg-brand-darkBg text-brand-darkText font-sans transition-colors duration-300 min-h-screen";
+                nav.className = "sticky top-0 z-40 bg-brand-darkCard border-brand-darkBorder text-brand-darkText border-b backdrop-blur bg-opacity-95";
+                footer.className = "border-t border-brand-darkBorder py-8 text-center text-xs text-brand-darkMuted";
+                themeGroup.className = "flex items-center rounded-full p-1 border border-brand-darkBorder bg-brand-darkBg";
+                
+                setActiveThemeButton('dark');
+
+                fontControls.querySelectorAll('button').forEach(btn => {
+                    btn.className = "w-8 h-8 rounded-lg flex items-center justify-center border border-brand-darkBorder text-brand-darkText bg-brand-darkCard hover:bg-brand-darkAccent transition-all";
+                });
+                toolSeparator.className = "h-5 w-px bg-brand-darkBorder";
+                backBtn.className = `${displayClass} items-center gap-2 font-medium text-sm text-brand-darkMuted hover:text-brand-secondary active:scale-95`;
+                footerBackBtn.className = "inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-darkBorder bg-brand-darkCard text-brand-darkMuted hover:text-brand-secondary hover:bg-brand-darkAccent transition-all duration-300 hover:scale-105 active:scale-95";
+
+                if(badgeTag) badgeTag.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase bg-brand-darkAccent text-brand-secondary";
+                if(homeTitle) homeTitle.className = "text-3xl md:text-4xl font-serif font-bold tracking-wider text-brand-secondary";
+                if(homeDesc) homeDesc.className = "text-sm md:text-base leading-relaxed text-brand-darkMuted";
+
+                if(articleHeader) articleHeader.className = "text-center space-y-4 border-b border-brand-darkBorder pb-8";
+                cards.forEach(card => {
+                    if(card) {
+                        if (card.id === 'cardPrayer') {
+                            card.className = "rounded-2xl p-6 md:p-8 border-2 border-dashed border-brand-secondary bg-brand-darkBg shadow-sm space-y-4";
+                        } else {
+                            card.className = "rounded-2xl p-6 md:p-8 border border-brand-darkBorder bg-brand-darkCard shadow-sm space-y-4";
+                        }
+                    }
+                });
+                if(cardBible) cardBible.className = "rounded-2xl p-8 border border-brand-darkBorder bg-brand-darkAccent text-center space-y-4 shadow-sm";
+                if(titleBible) titleBible.className = "inline-flex items-center gap-2 justify-center font-bold text-lg text-brand-secondary";
+                if(textVerse) textVerse.className = "block text-xs uppercase tracking-wider not-italic text-brand-darkMuted";
+            }
+            
+            // 同步卡片列表的顏色
+            renderGridCards();
+        }
+
+        // 切換主題按鈕的高亮狀態
+        function setActiveThemeButton(theme) {
+            const themes = ['light', 'sepia', 'dark'];
+            themes.forEach(t => {
+                const btn = document.getElementById(`btn-theme-${t}`);
+                if (btn) {
+                    if (t === theme) {
+                        btn.classList.add('bg-brand-primary', 'text-white', 'shadow-sm');
+                        btn.classList.remove('opacity-60');
+                    } else {
+                        btn.classList.remove('bg-brand-primary', 'text-white', 'shadow-sm');
+                        btn.classList.add('opacity-60');
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // 🔍 字型放大與縮小 (A+ / A-)
+        // ==========================================
+        function adjustFontSize(dir) {
+            const contentElements = [
+                document.getElementById('textTheater'),
+                document.getElementById('textThoughts'),
+                document.getElementById('textReflection'),
+                document.getElementById('textPrayer')
+            ];
+            
+            const sizes = ['text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl'];
+            let currIndex = sizes.indexOf(currentFontSizeClass);
+            
+            if (dir > 0 && currIndex < sizes.length - 1) {
+                currIndex++;
+            } else if (dir < 0 && currIndex > 0) {
+                currIndex--;
+            }
+            
+            // 移除舊的字型大小，套用新的
+            contentElements.forEach(el => {
+                if (el) {
+                    el.classList.remove(currentFontSizeClass);
+                    el.classList.add(sizes[currIndex]);
+                }
+            });
+            
+            currentFontSizeClass = sizes[currIndex];
+        }
+
+        // ==========================================
+        // 📚 渲染手記列表 (首頁網格卡片)
+        // ==========================================
+        function renderGridCards() {
+            const grid = document.getElementById('storyGrid');
+            if (!grid) return;
+            
+            const isDark = document.body.classList.contains('theme-dark');
+            const isSepia = document.body.classList.contains('theme-sepia');
+            
+            let cardBg, cardBorder, tagBg, tagText, titleColor, descColor;
+            
+            if (isDark) {
+                cardBg = "bg-brand-darkCard";
+                cardBorder = "border-brand-darkBorder hover:border-brand-secondary";
+                tagBg = "bg-brand-darkAccent";
+                tagText = "text-brand-secondary";
+                titleColor = "text-brand-darkText";
+                descColor = "text-brand-darkMuted";
+            } else if (isSepia) {
+                cardBg = "bg-brand-sepiaCard";
+                cardBorder = "border-brand-sepiaBorder hover:border-brand-primary";
+                tagBg = "bg-brand-sepiaAccent";
+                tagText = "text-brand-primary";
+                titleColor = "text-brand-sepiaText";
+                descColor = "text-brand-sepiaMuted";
+            } else {
+                cardBg = "bg-brand-lightCard";
+                cardBorder = "border-brand-lightBorder hover:border-brand-primary";
+                tagBg = "bg-brand-lightAccent";
+                tagText = "text-brand-primary";
+                titleColor = "text-brand-lightText";
+                descColor = "text-brand-lightMuted";
+            }
+            
+            grid.innerHTML = ARTICLES.map((article, index) => {
+                // 如果是預告篇章
+                if (article.isUpcoming) {
+                    return `
+                        <div class="rounded-2xl p-6 md:p-8 border border-dashed flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${cardBg} ${cardBorder}">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wider ${tagBg} ${tagText}">
+                                        ${article.vol}
+                                    </span>
+                                    <span class="text-xs font-medium opacity-60">
+                                        <i class="fa-solid fa-hourglass-start"></i> 提筆撰寫中
+                                    </span>
+                                </div>
+                                <h3 class="text-xl font-serif font-bold ${titleColor}">
+                                    ${article.title}
+                                </h3>
+                                <p class="text-sm leading-relaxed ${descColor}">
+                                    ${article.description}
+                                </p>
+                            </div>
+                            <div class="mt-8 flex items-center gap-2 text-xs font-medium opacity-60">
+                                <span>敬請期待，下回溫馨呈獻</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // 正常的已發布篇章
+                return `
+                    <div onclick="readArticle(${index})" class="rounded-2xl p-6 md:p-8 border cursor-pointer flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-1 active:scale-98 ${cardBg} ${cardBorder}">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wider ${tagBg} ${tagText}">
+                                    ${article.vol}
+                                </span>
+                                <span class="text-xs font-medium opacity-60">
+                                    已經發布 <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-serif font-bold ${titleColor}">
+                                ${article.title}
+                            </h3>
+                            <p class="text-sm leading-relaxed ${descColor}">
+                                ${article.description}
+                            </p>
+                        </div>
+                        <div class="mt-8 flex items-center justify-end text-xs font-medium ${tagText}">
+                            <span class="flex items-center gap-1">
+                                開始閱讀 <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==========================================
+        // 📖 導航與閱讀控制
+        // ==========================================
+        function readArticle(index) {
+            const data = ARTICLES[index];
+            if (!data || data.isUpcoming) return;
+            
+            // 切換視圖
+            document.getElementById('homepageView').classList.add('hidden');
+            document.getElementById('readingView').classList.remove('hidden');
+            
+            // 頂部導航列按鈕與樣式調整
+            document.getElementById('backBtn').classList.replace('hidden', 'flex');
+            document.getElementById('logoContainer').classList.add('hidden');
+            document.getElementById('fontControls').classList.replace('hidden', 'flex');
+            document.getElementById('toolSeparator').classList.replace('hidden', 'block');
+            
+            // 寫入文章內容
+            document.getElementById('articleVol').innerText = data.vol;
+            document.getElementById('articleTitle').innerText = data.title;
+            document.getElementById('articleSubtitle').innerText = data.subtitle;
+            
+            document.getElementById('textTheater').innerText = data.theater;
+            document.getElementById('textBible').innerText = data.bibleText;
+            document.getElementById('textVerse').innerText = data.bibleVerse;
+            document.getElementById('textThoughts').innerText = data.thoughts;
+            document.getElementById('textReflection').innerText = data.reflection;
+            document.getElementById('textPrayer').innerText = data.prayer;
+
+            // 套用當前的字體大小 class
+            const textContainers = [
+                document.getElementById('textTheater'),
+                document.getElementById('textThoughts'),
+                document.getElementById('textReflection'),
+                document.getElementById('textPrayer')
+            ];
+            textContainers.forEach(el => {
+                el.className = `leading-relaxed whitespace-pre-wrap ${currentFontSizeClass}`;
+            });
+
+            // 滾動到頂部
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function goHome() {
+            // 切換視圖
+            document.getElementById('homepageView').classList.remove('hidden');
+            document.getElementById('readingView').classList.add('hidden');
+            
+            // 頂部導航列還原
+            document.getElementById('backBtn').classList.replace('flex', 'hidden');
+            document.getElementById('logoContainer').classList.remove('hidden');
+            document.getElementById('fontControls').classList.replace('flex', 'hidden');
+            document.getElementById('toolSeparator').classList.replace('block', 'hidden');
+            
+            // 重新刷新網格（確保主題配色切換正確）
+            renderGridCards();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // ==========================================
+        // 🚀 初始化應用
+        // ==========================================
+        (function() {
+            // 預設為護眼書香模式
+            setTheme('sepia');
+            // 渲染手記
+            renderGridCards();
+        })();
+    </script>
+</body>
+</html>

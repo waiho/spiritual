@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七日靈修：作父親，教養在美國成長的女兒</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff5f5',
+                            100: '#ffe3e3',
+                            200: '#ffc9c9',
+                            500: '#fa5252',
+                            600: '#e03131',
+                            700: '#c92a2a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-[#FAF7F2] text-stone-800 dark:bg-stone-950 dark:text-stone-100 min-h-screen flex flex-col text-base">
+
+    <!-- 頂部導航欄 -->
+    <header class="sticky top-0 z-50 bg-[#FAF7F2]/90 dark:bg-stone-950/90 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="p-2 bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 rounded-lg">
+                    <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight">父愛、恩典、真理</h1>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">跨文化女兒教養七日靈修</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <!-- 字型大小控制 -->
+                <button id="btn-zoom-out" class="p-2 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-full text-stone-600 dark:text-stone-400" title="縮小字型">
+                    <i data-lucide="minus" class="w-4 h-4"></i>
+                </button>
+                <span id="font-size-indicator" class="text-xs font-semibold text-stone-500 min-w-[2.5rem] text-center">中字</span>
+                <button id="btn-zoom-in" class="p-2 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-full text-stone-600 dark:text-stone-400" title="放大字型">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+                
+                <!-- 分隔線 -->
+                <div class="w-px h-5 bg-stone-200 dark:bg-stone-800 mx-1"></div>
+
+                <!-- 深色模式切換 -->
+                <button id="btn-dark-mode" class="p-2 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-full text-stone-600 dark:text-stone-400" title="切換深淺色">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 介紹區域 (Banner) -->
+    <section class="bg-gradient-to-b from-rose-50/80 to-[#FAF7F2] dark:from-stone-900 dark:to-stone-950 py-8 px-4 transition-colors">
+        <div class="max-w-3xl mx-auto text-center">
+            <span class="inline-block px-3 py-1 bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-full mb-3">
+                華人基督徒父親靈修專欄
+            </span>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-stone-100 mb-3 tracking-tight">
+                作父親，教養在美國成長的女兒
+            </h2>
+            <p class="text-sm md:text-base text-stone-600 dark:text-stone-300 max-w-xl mx-auto leading-relaxed">
+                特別適合有香港文化背景、但女兒在美國成長的家庭。每天 15 分鐘，幫助我們不只是「管教」，更是建立一段有愛、有信任、有屬靈影響力的父女關係。
+            </p>
+        </div>
+    </section>
+
+    <!-- 主體內容 -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 pb-16">
+        <!-- 7天導航按鈕 (Tabs) -->
+        <div class="sticky top-[61px] z-40 bg-[#FAF7F2]/95 dark:bg-stone-950/95 py-3 border-b border-stone-200 dark:border-stone-800 mb-6 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">選擇靈修日程</span>
+                <!-- 重新加入：進度百分比標籤 -->
+                <span id="overall-progress" class="text-xs font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950 px-2.5 py-0.5 rounded-full">已完成 0 / 7 天</span>
+            </div>
+            
+            <!-- 更改為折行（flex-wrap）排版，確保在小螢幕上完全可見 -->
+            <div id="day-tabs-container" class="flex flex-wrap gap-2 w-full">
+                <!-- JS 將在此插入 7 天的 tab 按鈕 -->
+            </div>
+        </div>
+
+        <!-- 提醒訊息 (Toast Notification) -->
+        <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 bg-stone-900/95 dark:bg-stone-100/95 text-white dark:text-stone-900 px-5 py-3 rounded-xl shadow-xl text-sm font-medium flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none scale-95">
+            <i id="toast-icon" data-lucide="check-circle" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+            <span id="toast-message">狀態已更新！</span>
+        </div>
+
+        <!-- 靈修內容主卡片 -->
+        <article class="bg-white dark:bg-stone-900 rounded-3xl shadow-xl border border-stone-100 dark:border-stone-800 overflow-hidden transition-all duration-300">
+            <!-- 卡片頂部狀態欄 -->
+            <div class="p-6 md:p-8 bg-gradient-to-r from-rose-50 to-orange-50/50 dark:from-stone-800 dark:to-stone-800/50 border-b border-stone-100 dark:border-stone-800 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <span id="content-day-num" class="w-12 h-12 rounded-2xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-rose-600/20">
+                        1
+                    </span>
+                    <div>
+                        <span class="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest block">Daily Devotion</span>
+                        <h3 id="content-day-title" class="text-xl md:text-2xl font-black text-stone-900 dark:text-stone-100">
+                            <!-- 標題 -->
+                        </h3>
+                    </div>
+                </div>
+                
+                <!-- 功能操作 (標記完成按鈕) -->
+                <div class="flex items-center space-x-2 self-end md:self-auto">
+                    <!-- 完成標記 -->
+                    <button id="btn-toggle-complete" class="flex items-center space-x-1 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                        <!-- JS 動態更新內容 -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片閱讀區域 -->
+            <div id="reading-content-area" class="p-6 md:p-10 space-y-10 leading-relaxed transition-all">
+                <!-- 1. 今日經文 Section -->
+                <section class="space-y-4">
+                    <div class="flex items-center space-x-2 text-rose-700 dark:text-rose-400">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                        <h4 class="font-bold text-sm tracking-widest uppercase">今日經文</h4>
+                    </div>
+                    <div class="relative bg-rose-50/50 dark:bg-rose-950/20 border-l-4 border-rose-500 rounded-r-2xl p-5 md:p-6 italic">
+                        <p id="section-scripture" class="font-medium text-stone-900 dark:text-stone-100 mb-2">
+                            <!-- 經文 -->
+                        </p>
+                        <p id="section-scripture-source" class="text-sm font-bold text-stone-500 dark:text-stone-400 text-right">
+                            <!-- 出處 -->
+                        </p>
+                        <div class="absolute right-4 top-2 text-rose-200 dark:text-rose-900/50 text-5xl font-serif pointer-events-none select-none">”</div>
+                    </div>
+                </section>
+
+                <!-- 2. 思想默想 Section -->
+                <section class="space-y-4">
+                    <div class="flex items-center space-x-2 text-rose-700 dark:text-rose-400">
+                        <i data-lucide="brain" class="w-5 h-5"></i>
+                        <h4 class="font-bold text-sm tracking-widest uppercase">思想默想</h4>
+                    </div>
+                    <div id="section-meditation" class="space-y-4 text-stone-700 dark:text-stone-300">
+                        <!-- 默想內容 -->
+                    </div>
+                </section>
+
+                <!-- 3. 反省問題 Section -->
+                <section class="space-y-4 bg-stone-50 dark:bg-stone-800/40 rounded-2xl p-6 border border-stone-100 dark:border-stone-800">
+                    <div class="flex items-center space-x-2 text-amber-700 dark:text-amber-400">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                        <h4 class="font-bold text-sm tracking-widest uppercase">反省問題</h4>
+                    </div>
+                    <ul id="section-questions" class="space-y-3 pl-1 text-stone-700 dark:text-stone-300">
+                        <!-- 問題列表 -->
+                    </ul>
+                </section>
+
+                <!-- 4. 今日實踐 Section -->
+                <section class="space-y-4 border-2 border-emerald-500/20 dark:border-emerald-400/10 rounded-2xl p-6 bg-emerald-50/20 dark:bg-emerald-950/10">
+                    <div class="flex items-center space-x-2 text-emerald-700 dark:text-emerald-400">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                        <h4 class="font-bold text-sm tracking-widest uppercase">今日實踐</h4>
+                    </div>
+                    <div id="section-action" class="text-stone-700 dark:text-stone-300">
+                        <!-- 實踐行動 -->
+                    </div>
+                </section>
+
+                <!-- 5. 今日禱告 Section -->
+                <section class="space-y-4 bg-orange-50/30 dark:bg-amber-950/10 rounded-2xl p-6 border border-orange-100/50 dark:border-amber-900/10">
+                    <div class="flex items-center space-x-2 text-orange-700 dark:text-orange-400">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <h4 class="font-bold text-sm tracking-widest uppercase">今日禱告</h4>
+                    </div>
+                    <div id="section-prayer" class="italic text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-line pl-2 border-l-2 border-orange-300 dark:border-orange-800">
+                        <!-- 禱告文 -->
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 卡片底部換頁導航 -->
+            <div class="px-6 py-5 bg-stone-50 dark:bg-stone-900 border-t border-stone-100 dark:border-stone-800 flex justify-between items-center">
+                <button id="btn-prev-day" class="flex items-center space-x-1.5 px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-sm font-semibold transition-all">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    <span>上一天</span>
+                </button>
+                
+                <span id="current-page-label" class="text-xs font-semibold text-stone-400">1 / 7 天</span>
+
+                <button id="btn-next-day" class="flex items-center space-x-1.5 px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-sm font-semibold transition-all">
+                    <span>下一天</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </article>
+
+        <!-- 結語 card -->
+        <section class="mt-8 bg-gradient-to-br from-rose-50 to-orange-50 dark:from-stone-900 dark:to-stone-900/50 rounded-3xl p-6 md:p-8 border border-rose-100/50 dark:border-stone-800 text-center">
+            <h4 class="text-base font-bold text-rose-800 dark:text-rose-300 mb-2">結語與叮嚀</h4>
+            <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed max-w-2xl mx-auto italic">
+                「父親的影響，不一定來自偉大的說話。很多時候，女兒記得的是：一次溫柔的擁抱、一次理解、一次道歉、一個禱告、一份陪伴。願神使用每一位父親，在跨文化家庭中，建立有愛、有恩典、有真理的下一代。」
+            </p>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-stone-100 dark:bg-stone-950 py-8 border-t border-stone-200 dark:border-stone-900 text-center text-xs text-stone-400 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p>這份七日靈修材料特別為華人基督徒父親而編製。</p>
+            <p>&copy; 2026 Generated by Gemini. 保留所有權利。</p>
+        </div>
+    </footer>
+
+    <!-- 全局 JS 邏輯 -->
+    <script>
+        // 1. 靈修資料
+        const devotionsData = [
+            {
+                day: 1,
+                title: "先做女兒的父親，不只是管理者",
+                scripture: "「你們作父親的，不要惹兒女的氣，只要照著主的教訓 and 警戒養育他們。」",
+                scriptureSource: "— 《聖經》Bible 《以弗所書》6:4",
+                meditation: [
+                    "很多香港背景的父親，成長時習慣了「父親權威」文化：",
+                    "• 父親說話，孩子就要聽<br>• 成績重要<br>• 要乖、要有禮貌<br>• 少講感受，多講責任",
+                    "但在美國長大的女兒，從小學習的是：",
+                    "• 表達自己<br>• 問問題<br>• 情緒需要被理解<br>• 關係比權威更重要",
+                    "於是父親容易覺得：「點解咁多問題？」、「我明明為你好。」、「以前我細個唔會咁。」",
+                    "位置提醒父親：不要只做「控制者」，而是做「養育者」。",
+                    "女兒最需要的，不只是供書教學；她更需要知道：「爸爸願意聽我。」、「即使我失敗，爸爸仍然愛我。」、「我可以安心向爸爸表達自己。」",
+                    "很多女兒長大後離開教會，不一定因為不信神，而是因為她感受不到「天父的愛」。而父親，往往是她第一個認識「父愛」的窗口。"
+                ],
+                questions: [
+                    "1. 我平時和女兒說話，是命令多，還是聆聽多？",
+                    "2. 我有沒有因為香港式成長背景，而忽略女兒的情緒？",
+                    "3. 女兒會否覺得：爸爸愛我，是因為我表現好？"
+                ],
+                action: "今晚刻意花 10 分鐘，單純和女兒聊天。不要教訓，不要糾正，不要急著給答案。只問：<br>「你最近最開心的是什麼？」<br>「最近有沒有什麼壓力？」<br>「爸爸想更了解你。」",
+                prayer: "天父，\n感謝祢把女兒交託給我。\n\n求祢幫助我，不只是做一個供應者，更做一個懂得愛、懂得聆聽的父親。\n\n求祢醫治我成長中那些嚴厲、壓抑的觀念，讓我學習用恩典和真理去帶領女兒。\n\n讓女兒能透過我，看見祢的慈愛。\n奉主耶穌基督名求，阿們。"
+            },
+            {
+                day: 2,
+                title: "女兒需要安全感，不只是道理",
+                scripture: "「愛裡沒有懼怕；愛既完全，就把懼怕除去。」",
+                scriptureSource: "— 《約翰一書》4:18",
+                meditation: [
+                    "很多亞洲父母擅長「指出問題」，卻不太習慣「表達愛」。",
+                    "我們以為：<br>• 努力工作就是愛<br>• 買東西就是愛<br>• 安排前途就是愛",
+                    "但美國文化中的孩子，更重視：<br>• Verbal affirmation（言語肯定）<br>• Emotional safety（情感安全）<br>• Quality time（高質素陪伴）",
+                    "女兒未必記得你買過什麼，但她會記得：<br>• 你有沒有耐心聽她哭<br>• 她失敗時你第一句說什麼<br>• 她講心事時你有沒有看手機",
+                    "安全感，不是「爸爸很厲害」，而是：「即使我不完美，爸爸仍然接納我。」"
+                ],
+                questions: [
+                    "1. 我多久沒有真誠稱讚女兒？",
+                    "2. 我女兒最怕我什麼反應？",
+                    "3. 我會否只在女兒做得好時才溫柔？"
+                ],
+                action: "今天至少對女兒說一句：<br>「爸爸為你感恩。」<br>「爸爸欣賞你。」<br>「你不用完美，我仍然愛你。」",
+                prayer: "主啊，\n求祢讓我的家，不是一個只有要求的地方，而是一個充滿恩典與安全感的地方。\n\n讓女兒 know，她不需要靠表現換取愛。也讓我學習像祢一樣，用溫柔建立人。\n\n奉主名求，阿們。"
+            },
+            {
+                day: 3,
+                title: "教導信仰，不只是帶她返教會",
+                scripture: "「我今日所吩咐你的話，都要記在心上，也要殷勤教訓你的兒女。」",
+                scriptureSource: "— 《申命記》6:6-7",
+                meditation: [
+                    "很多華人家庭重視：主日學、團契、聖經知識。",
+                    "but 女兒真正觀察的是：<br>• 爸爸有沒有活出信仰<br>• 爸爸如何對媽媽<br>• 爸爸生氣時怎樣處理<br>• 爸爸有沒有真正依靠神",
+                    "在美國文化中長大的孩子，對「真實」非常敏感。",
+                    "如果父親在教會很屬靈，回家卻很暴躁；對外人客氣，對家人苛刻，女兒會覺得：「信仰只是表面。」",
+                    "信仰傳承，不是靠控制，而是靠生命榜樣。"
+                ],
+                questions: [
+                    "1. 我在家中的態度，和在教會是否一致？",
+                    "2. 女兒會從我身上看到怎樣的基督？",
+                    "3. 我有沒有在家中主動分享自己的屬靈掙扎？"
+                ],
+                action: "今晚和女兒分享一件：神最近如何幫助你、你最近學習的一個功課，或一個你曾軟弱但神扶持你的經歷。",
+                prayer: "主耶穌，\n求祢不要讓我的信仰只停留在知識。\n\n讓我在家中，也活出基督的樣式。\n願我的女兒，不只是聽我講信仰，更能從我生命裡看見祢。\n\n阿們。"
+            },
+            {
+                day: 4,
+                title: "學習聆聽青春期女兒",
+                scripture: "「各人要快快地聽，慢地說，慢慢地動怒。」",
+                scriptureSource: "— 《雅觀書》1:19",
+                meditation: [
+                    "青春期女兒，有時情緒起伏很大。",
+                    "香港父親容易立刻想：解決問題、分析對錯、教人生道理。",
+                    "but 很多時候，女兒真正需要的是：「爸爸明白我的感受。」",
+                    "起碼在美國文化中，情感表達比上一代華人家庭更直接。",
+                    "當女兒說：「你不明白我」、「你可唔可以唔好教訓我」、「我只想你聽我講」，她未必是反叛，而是在尋找連結。"
+                ],
+                questions: [
+                    "1. 我是否急於糾正，而忽略理解？",
+                    "2. 我有沒有打斷女兒說話？",
+                    "3. 我上一次真正聆聽女兒，是什麼時候？"
+                ],
+                action: "今天和女兒對話時：不急著評論、不急著教導、重複她的感受。例如：<br>「聽起來你好失望。」<br>「原來你最近壓力很大。」",
+                prayer: "主啊，\n求祢給我溫柔和耐性。\n\n讓庫不是只想控制女兒，而是真正進入她的世界。\n\n幫助我學習聆聽，像祢聆聽我一樣。\n\n編者註：此章節已結束。阿們。"
+            },
+            {
+                day: 5,
+                title: "保護女兒的身份價值",
+                scripture: "「我要稱謝祢，因我受造奇妙可畏。」",
+                scriptureSource: "— 《詩篇》139:14",
+                meditation: [
+                    "在美國成長的女孩，每天面對很多身份壓力：外表比較、社交媒體、同儕文化、性別與價值觀衝擊。",
+                    "skinny、漂亮、完美、別人喜歡。很多女兒心底其實在問：「我夠不夠好？」、「我值得被愛嗎？」",
+                    "父親的說話，影響非常深。",
+                    "開玩笑批評外貌、用比較推動進步、很少肯定。但這些話，可能深深留在女兒心裡。",
+                    "父親其中一個重要責任，是幫助女兒知道：她的價值來自神，不是來自外表、成績或別人的認同。"
+                ],
+                questions: [
+                    "1. 我平時的說話，是建立還是拆毀？",
+                    "2. 我有沒有常拿女兒與別人比較？",
+                    "3. 女兒知道自己在神眼中是寶貴的嗎？"
+                ],
+                action: "今天刻意肯定女兒一個品格、性格優點、愛心、努力、或責任感。不要只稱讚外表或成績。",
+                prayer: "天父，\n求祢保守女兒的心。\n\n在這個充滿比較的世界，讓她知道自己是祢珍決的女兒。\n\n也求祢潔淨我的口，讓我的說話成為祝福。\n\n奉主名求，阿們。"
+            },
+            {
+                day: 6,
+                title: "父親也要學習認錯",
+                scripture: "「所以你們要彼此認罪，互相代求。」",
+                scriptureSource: "— 《雅各書》5:16",
+                meditation: [
+                    "很多亞洲父親從小被教導：「爸爸不能失威。」、「長輩不用道歉。」",
+                    "開口認錯，反而能拉近父女距離。",
+                    "當父親願意說：「爸爸剛才太兇，對不起。」、「爸爸都有軟弱。」、「爸爸都需要神幫助。」",
+                    "女兒學到的，不是軟弱；而是真誠與謙卑。",
+                    "很多孩子離開父母，不是因為父母犯錯，而是因為父母永遠不承認錯。"
+                ],
+                questions: [
+                    "1. 我上一次向女兒道歉，是何時？",
+                    "2. 我是否太在意父親權威？",
+                    "3. 我有沒有用情緒傷害女兒？"
+                ],
+                action: "若最近曾錯待女兒，今天主動向她道歉。不要加「但係你都……」。只單純承認：「爸爸錯了。」",
+                prayer: "主啊，\n求祢除去我的驕傲。\n\n讓我不靠權威建立關係，而是靠真誠與愛。\n\n求祢修補我與女兒之間隱藏的傷痕。\n奉主名求，阿們。"
+            },
+            {
+                day: 7,
+                title: "把女兒交託給神",
+                scripture: "「你要專心仰賴耶和華，不可倚靠自己的聰明。」",
+                scriptureSource: "— 《箴言》3:5",
+                meditation: [
+                    "辦多香港父母容易擔心：女兒前途、成績、工作、婚姻、信仰、安全。",
+                    "尤其在美國社會，文化價值與基督信仰常有張力。",
+                    "父親很容易想：「我要控制好一切。」",
+                    "但其實，女兒真正的主人不是父親，而是神。",
+                    "父親的角色，不是掌控她的一生；而是陪伴她認識神。有一天，女兒會長大、離家、獨立。但若她認識天父，她一生都不孤單。"
+                ],
+                questions: [
+                    "1. 我是否把焦慮變成控制？",
+                    "2. 我有沒有真正相信神愛女兒比我更深？",
+                    "3. 我最大的盼望，是女兒成功，還是她認識神？"
+                ],
+                action: "今晚為女兒按手禱告。即使她已長大，也可以輕輕為她祝福：<br>「願神保守你。」<br>「爸爸感謝神賜你給我們。」<br>「願你一生跟隨主。」",
+                prayer: "親愛的天父，\n感謝祢把女兒交託給我。\n\n我承認自己有限、軟弱，也有很多擔憂。但今天，我願意再次把女兒交在祢手中。\n\n求祢親自帶領她的人生。保守她的信仰、心靈與道路。\n\n也讓我成為一個敬畏神、充滿恩典的父親。\n奉主耶穌基督名求，阿們。"
+            }
+        ];
+
+        // 2. 狀態管理 (將預設字型等級初始化為 1「中字」，即 16px 基礎)
+        let currentDayIndex = 0; // 修正：重新加入此處遺漏的全局變數，防止初始化時 renderTabs 出現 ReferenceError
+        let fontSizeLevel = 1; 
+        const fontSizes = [
+            { text: '小字', size: '14px' },
+            { text: '中字', size: '16px' },
+            { text: '大字', size: '19px' },
+            { text: '特大', size: '22px' }
+        ];
+
+        // 重新加入：本地儲存鍵名與陣列
+        const COMPLETED_DAYS_KEY = 'devotional_completed_days';
+        let completedDays = [];
+
+        // 3. DOM 元素
+        const dayTabsContainer = document.getElementById('day-tabs-container');
+        const overallProgress = document.getElementById('overall-progress'); // 重新綁定進度條
+        
+        const contentDayNum = document.getElementById('content-day-num');
+        const contentDayTitle = document.getElementById('content-day-title');
+        
+        const sectionScripture = document.getElementById('section-scripture');
+        const sectionScriptureSource = document.getElementById('section-scripture-source');
+        const sectionMeditation = document.getElementById('section-meditation');
+        const sectionQuestions = document.getElementById('section-questions');
+        const sectionAction = document.getElementById('section-action');
+        const sectionPrayer = document.getElementById('section-prayer');
+        
+        const btnPrevDay = document.getElementById('btn-prev-day');
+        const btnNextDay = document.getElementById('btn-next-day');
+        const currentPageLabel = document.getElementById('current-page-label');
+        
+        const btnToggleComplete = document.getElementById('btn-toggle-complete'); // 重新綁定
+        
+        const btnZoomIn = document.getElementById('btn-zoom-in');
+        const btnZoomOut = document.getElementById('btn-zoom-out');
+        const fontSizeIndicator = document.getElementById('font-size-indicator');
+        const readingContentArea = document.getElementById('reading-content-area');
+        
+        const btnDarkMode = document.getElementById('btn-dark-mode');
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toast-icon');
+        const toastMessage = document.getElementById('toast-message');
+
+        // 4. 初始化
+        function init() {
+            // 從 LocalStorage 載入進度
+            try {
+                completedDays = JSON.parse(localStorage.getItem(COMPLETED_DAYS_KEY)) || [];
+            } catch(e) {
+                completedDays = [];
+            }
+
+            renderTabs();
+            loadDay(0);
+            updateProgress(); // 更新進度條
+            
+            // 強制初始化時同步根節點字體與指示器狀態
+            changeFontSize(0); 
+            
+            lucide.createIcons();
+
+            // 監聽基本按鈕事件
+            btnPrevDay.addEventListener('click', prevDay);
+            btnNextDay.addEventListener('click', nextDay);
+            btnToggleComplete.addEventListener('click', toggleComplete); // 重新啟用監聽
+            
+            btnZoomIn.addEventListener('click', () => changeFontSize(1));
+            btnZoomOut.addEventListener('click', () => changeFontSize(-1));
+            btnDarkMode.addEventListener('click', toggleDarkMode);
+
+            // 初始化深色模式
+            if (localStorage.getItem('dark-mode') === 'true' || 
+                (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        // 5. 生成 7天標籤頁
+        function renderTabs() {
+            dayTabsContainer.innerHTML = '';
+            devotionsData.forEach((d, index) => {
+                const btn = document.createElement('button');
+                btn.id = `tab-day-${d.day}`;
+                
+                // 重新加入完成打勾指示 (isCompleted = completedDays.includes(d.day))
+                const isCompleted = completedDays.includes(d.day);
+                updateTabStyle(btn, d.day, index === currentDayIndex, isCompleted);
+                
+                btn.addEventListener('click', () => {
+                    loadDay(index);
+                });
+                
+                dayTabsContainer.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        function updateTabStyle(btn, dayNum, isActive, isCompleted) {
+            let completedBadge = isCompleted ? `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 fill-current"></i>` : "";
+            btn.innerHTML = `<span>Day ${dayNum}</span>${completedBadge}`;
+
+            if (isActive) {
+                btn.className = `flex items-center justify-center space-x-1 px-4 py-2.5 rounded-xl md:rounded-2xl text-xs font-black transition-all border bg-rose-600 border-rose-600 text-white shadow-md shadow-rose-600/10`;
+                if (isCompleted) {
+                     btn.innerHTML = `<span>Day ${dayNum}</span><i data-lucide="check" class="w-3.5 h-3.5 text-white fill-current"></i>`;
+                }
+            } else {
+                if (isCompleted) {
+                    btn.className = `flex items-center justify-center space-x-1 px-3 py-2 md:px-4 md:py-2.5 rounded-xl md:rounded-2xl text-xs font-bold transition-all border bg-emerald-50/50 hover:bg-emerald-100/50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/50 dark:text-emerald-400`;
+                } else {
+                    btn.className = `flex items-center justify-center space-x-1 px-4 py-2.5 rounded-xl md:rounded-2xl text-xs font-semibold transition-all border bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300`;
+                }
+            }
+        }
+
+        // 6. 載入特定天的內容
+        function loadDay(index) {
+            currentDayIndex = index;
+            const data = devotionsData[index];
+            
+            renderTabs();
+            readingContentArea.style.opacity = 0;
+            
+            setTimeout(() => {
+                contentDayNum.innerText = data.day;
+                contentDayTitle.innerText = data.title;
+                sectionScripture.innerHTML = data.scripture;
+                sectionScriptureSource.innerText = data.scriptureSource;
+                
+                // 填充默想
+                sectionMeditation.innerHTML = '';
+                data.meditation.forEach(p => {
+                    const paragraph = document.createElement('p');
+                    paragraph.className = 'leading-relaxed mb-3';
+                    paragraph.innerHTML = p;
+                    sectionMeditation.appendChild(paragraph);
+                });
+                
+                // 填充問題
+                sectionQuestions.innerHTML = '';
+                data.questions.forEach(q => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start space-x-2 py-1';
+                    li.innerHTML = `
+                        <span class="text-rose-500 font-bold shrink-0">•</span>
+                        <span>${q.replace(/^\d+\.\s*/, '')}</span>
+                    `;
+                    sectionQuestions.appendChild(li);
+                });
+                
+                sectionAction.innerHTML = `<p class="leading-relaxed font-medium">${data.action}</p>`;
+                sectionPrayer.innerText = data.prayer;
+
+                // 換頁欄
+                currentPageLabel.innerText = `${data.day} / 7 天`;
+                btnPrevDay.disabled = index === 0;
+                btnPrevDay.className = index === 0 
+                    ? `flex items-center space-x-1 px-4 py-2 opacity-30 cursor-not-allowed text-stone-400 text-sm font-semibold` 
+                    : `flex items-center space-x-1 px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-sm font-semibold transition-all`;
+                
+                btnNextDay.disabled = index === devotionsData.length - 1;
+                btnNextDay.className = index === devotionsData.length - 1 
+                    ? `flex items-center space-x-1 px-4 py-2 opacity-30 cursor-not-allowed text-stone-400 text-sm font-semibold` 
+                    : `flex items-center space-x-1 px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-sm font-semibold transition-all`;
+
+                updateCompleteBtnState(); // 更新按鈕勾選狀態
+                lucide.createIcons();
+                readingContentArea.style.opacity = 1;
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+            }, 150);
+        }
+
+        // 7. 翻頁邏輯
+        function prevDay() {
+            if (currentDayIndex > 0) loadDay(currentDayIndex - 1);
+        }
+
+        function nextDay() {
+            if (currentDayIndex < devotionsData.length - 1) loadDay(currentDayIndex + 1);
+        }
+
+        // 8. 重新加入：標記為完成/取消完成
+        function toggleComplete() {
+            const currentDayNumValue = devotionsData[currentDayIndex].day;
+            if (completedDays.includes(currentDayNumValue)) {
+                completedDays = completedDays.filter(d => d !== currentDayNumValue);
+                showToast("已取消完成標記", "info");
+            } else {
+                completedDays.push(currentDayNumValue);
+                showToast(`已完成第 ${currentDayNumValue} 天靈修！🎉`, "success");
+            }
+            localStorage.setItem(COMPLETED_DAYS_KEY, JSON.stringify(completedDays));
+            updateProgress();
+            renderTabs();
+            updateCompleteBtnState();
+        }
+
+        function updateCompleteBtnState() {
+            const currentDayNumValue = devotionsData[currentDayIndex].day;
+            const isCompleted = completedDays.includes(currentDayNumValue);
+            
+            if (isCompleted) {
+                btnToggleComplete.className = `flex items-center space-x-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-emerald-600/10`;
+                btnToggleComplete.innerHTML = `
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>已完成</span>
+                `;
+            } else {
+                btnToggleComplete.className = `flex items-center space-x-1 px-4 py-2 bg-rose-50 dark:bg-rose-950 hover:bg-rose-100 dark:hover:bg-rose-900 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 rounded-xl text-sm font-semibold transition-all`;
+                btnToggleComplete.innerHTML = `
+                    <i data-lucide="circle" class="w-4 h-4"></i>
+                    <span>標記完成</span>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function updateProgress() {
+            overallProgress.innerText = `已完成 ${completedDays.length} / 7 天`;
+        }
+
+        // 9. 字型大小 (直接控制 <html> 根字體以達到全局無瑕等比例縮放)
+        function changeFontSize(direction) {
+            fontSizeLevel += direction;
+            if (fontSizeLevel < 0) fontSizeLevel = 0;
+            if (fontSizeLevel > 3) fontSizeLevel = 3;
+            
+            const targetFont = fontSizes[fontSizeLevel];
+            
+            // 直接修改根 HTML 的 font-size，使全部 rem 單位的 Tailwind 文字完美放大縮小
+            document.documentElement.style.fontSize = targetFont.size;
+            fontSizeIndicator.innerText = targetFont.text;
+        }
+
+        // 10. 深淺色模式
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('dark-mode', isDark);
+        }
+
+        // 11. 美化自訂彈出提示
+        function showToast(message, type = "success") {
+            toastMessage.innerText = message;
+            
+            if (type === "success") {
+                toastIcon.setAttribute("data-lucide", "check-circle");
+                toastIcon.className = "w-4 h-4 text-emerald-400 dark:text-emerald-600";
+            } else if (type === "info") {
+                toastIcon.setAttribute("data-lucide", "info");
+                toastIcon.className = "w-4 h-4 text-sky-400 dark:text-sky-600";
+            } else {
+                toastIcon.setAttribute("data-lucide", "alert-triangle");
+                toastIcon.className = "w-4 h-4 text-rose-500";
+            }
+            lucide.createIcons();
+
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            toast.classList.add('opacity-100', 'scale-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'scale-100');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            }, 3500);
+        }
+
+        // 12. 啟動
+        window.onload = function() {
+            init();
+        }
+    </script>
+</body>
+</html>
